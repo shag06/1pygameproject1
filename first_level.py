@@ -1,6 +1,8 @@
-import os, sys, pygame, random
+import pygame
+import random
 
-from Classes import Willy, Bullet, Ghost, load_image, Cur
+from Classes import Willy, Bullet, Ghost, load_image
+from pausing import pause
 
 
 class FirstLevel:
@@ -45,58 +47,65 @@ class FirstLevel:
         pygame.display.set_caption("No peace for Willy")
 
         running = True
-
+        pausing = False
         while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_a:
-                        self.willy.move_left = True
-                    elif event.key == pygame.K_d:
-                        self.willy.move_right = True
-                    elif event.key == pygame.K_w:
-                        self.willy.move_forward = True
-                    elif event.key == pygame.K_s:
-                        self.willy.move_backwards = True
+            if not pausing:
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                        pause(self.willy, self.ghosts)
+                    if event.type == pygame.QUIT:
+                        running = False
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_a:
+                            self.willy.move_left = True
+                        elif event.key == pygame.K_d:
+                            self.willy.move_right = True
+                        elif event.key == pygame.K_w:
+                            self.willy.move_forward = True
+                        elif event.key == pygame.K_s:
+                            self.willy.move_backwards = True
 
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_a:
-                        self.willy.move_left = False
-                    elif event.key == pygame.K_d:
-                        self.willy.move_right = False
-                    elif event.key == pygame.K_w:
-                        self.willy.move_forward = False
-                    elif event.key == pygame.K_s:
-                        self.willy.move_backwards = False
+                    if event.type == pygame.KEYUP:
+                        if event.key == pygame.K_a:
+                            self.willy.move_left = False
+                        elif event.key == pygame.K_d:
+                            self.willy.move_right = False
+                        elif event.key == pygame.K_w:
+                            self.willy.move_forward = False
+                        elif event.key == pygame.K_s:
+                            self.willy.move_backwards = False
 
-                if event.type == pygame.MOUSEBUTTONUP:
-                    self.bullets.append(Bullet((self.willy.x, self.willy.y), event.pos, self.bullets, self.clock))
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        self.bullets.append(Bullet((self.willy.x, self.willy.y), event.pos, self.bullets, self.clock))
 
-            self.willy.moving()
-            self.willy.update()
+                self.willy.moving()
+                self.willy.update()
 
-            for j in self.ghosts:
+                for j in self.ghosts:
+                    for i in self.bullets:
+                        i.hit(j)
+                    is_living = j.update((self.willy.x, self.willy.y))
+                    if not is_living:
+                        self.ghosts.append(Ghost(*self.coords_for_ghosts[random.randint(0, 3)],
+                                                 self.ghosts, self.willy, self.clock))
                 for i in self.bullets:
-                    i.hit(j)
-                is_living = j.update((self.willy.x, self.willy.y))
-                if not is_living:
-                    self.ghosts.append(Ghost(*self.coords_for_ghosts[random.randint(0, 3)],
-                                             self.ghosts, self.willy, self.clock))
-            for i in self.bullets:
-                i.update()
+                    i.update()
 
-            self.screen.blit(self.bg, (0, 0))
-            self.screen.blit(self.willy.image, self.willy.rect)
-            for ghost in self.ghosts:
-                self.screen.blit(ghost.image, ghost.rect)
-            for bullet in self.bullets:
-                self.screen.blit(bullet.image, bullet.rect)
+                self.screen.blit(self.bg, (0, 0))
+                self.screen.blit(self.willy.image, self.willy.rect)
+                for ghost in self.ghosts:
+                    self.screen.blit(ghost.image, ghost.rect)
+                for bullet in self.bullets:
+                    self.screen.blit(bullet.image, bullet.rect)
 
-            # количество жизней у willy
-            self.progressbar_willy()
-            # количество жизней у ghost
-            self.progressbar_ghost()
+                # количество жизней у willy
+                self.progressbar_willy()
+                # количество жизней у ghost
+                self.progressbar_ghost()
+            else:
+                for event in pygame.event.get():
+                    if event.type == pygame.K_ESCAPE:
+                        pausing = False
 
             pygame.display.flip()
         quit()

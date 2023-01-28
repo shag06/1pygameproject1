@@ -3,7 +3,7 @@ import time
 
 import pygame
 import sys
-
+from pausing import pause
 from Classes import Willy, Bullet, Boss, load_image, Cur
 
 
@@ -46,6 +46,8 @@ class SecondLevel:
         clock = time.time()
         while running:
             for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    pause(self.willy, [self.boss])
                 if event.type == pygame.QUIT:
                     running = False
                 if event.type == pygame.KEYDOWN:
