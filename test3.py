@@ -1,26 +1,16 @@
-t = int(input())
-for i in range(t):
-    n, m = map(int, input().split())
-    if 0 in [n % m, m % n]:
-        print(max(m, n) - 1)
-        if m == max(m, n):
-            for j in range(max(m, n) - 1):
-                print(-1, end=" ")
-        else:
-            for j in range(max(m, n) - 1):
-                print(1, end=" ")
-    elif min(n, m) == 2:
-        print(max(m, n))
-        if m == max(m, n):
-            for j in range(max(m, n)):
-                if j % 2 == 0:
-                    print(3, end=" ")
-                else:
-                    print(-4, end=" ")
-        else:
-            for j in range(max(m, n)):
-                if j % 2 == 0:
-                    print(-3, end=" ")
-                else:
-                    print(4, end=" ")
-    print()
+n = int(input())
+lst = [i for i in range(1, n + 1)]
+ind1 = 0
+ind2 = 0
+summ = 0
+ans = lst[0]
+while ind1 < n and ind2 < n:
+    if summ == n:
+        ans += 1
+    if summ <= n:
+        summ += lst[ind2]
+        ind2 += 1
+    else:
+        summ -= lst[ind1]
+        ind1 += 1
+print(ans)
