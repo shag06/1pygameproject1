@@ -1,13 +1,13 @@
 import pygame
 import sys
 from first_level import FirstLevel
-from pausing import pause
 from Classes import load_image
 
 pygame.init()
 screen = pygame.display.set_mode((1000, 800))
 pygame.display.set_caption("No peace for Willy!")
 main_font = pygame.font.SysFont("cambria", 45)
+
 
 class Button:
     def __init__(self, image, x_pos, y_pos, text_input):
@@ -54,14 +54,13 @@ button1 = Button(button_surface1, 500, 175, "Новая игра")
 button2 = Button(button_surface2, 500, 370, "Загрузить игру")
 button3 = Button(button_surface3, 500, 550, "Об игре")
 
-if __name__ == "__main__":
+
+def play():
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.K_ESCAPE:
-                pause()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 button1.checkForInput(pygame.mouse.get_pos(), 1)
                 button2.checkForInput(pygame.mouse.get_pos(), 2)
@@ -75,3 +74,8 @@ if __name__ == "__main__":
         button3.update()
         button3.changeColor(pygame.mouse.get_pos())
         pygame.display.update()
+
+
+
+if __name__ == "__main__":
+    play()

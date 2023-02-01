@@ -1,6 +1,8 @@
 import os
 import pygame
 import sys
+from Game_over import game_lose
+from game_won import you_win
 
 
 # Класс главного персонажа
@@ -44,6 +46,7 @@ class Willy(pygame.sprite.Sprite):
     def update(self, *args):
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
         if self.HP <= 0:
+            game_lose()
             sys.exit()
 
     # Функция движения
@@ -234,16 +237,17 @@ class Boss(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.x = 300
         self.y = 0
+        self.pos = (self.x, self.y)
+        self.HP = 2000
 
-        self.HP = 1000
-
-        image = load_image('data/images/newbullet.png')
+        image = load_image('data/images/VVP1.png')
         self.image = pygame.transform.scale(image, (300, 200))
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
     def update(self):
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
         if self.HP <= 0:
+            you_win("data/images/game_win.jpg")
             sys.exit()
 
 
@@ -273,3 +277,11 @@ def load_image(name, colorkey=pygame.Color("WHITE")):
     image = pygame.image.load(fullname).convert()
     image.set_colorkey(colorkey)
     return image
+
+
+class Boss_bullet(Bullet):
+    def __init__(self, pos, target, group, clock):
+        super().__init__(pos, target, group, clock)
+        self.image = pygame.transform.scale(load_image('data/images/BossBullet.png',
+                                                       colorkey=pygame.Color("WHITE")), (70, 70))
+        self.DAMAGE = 200

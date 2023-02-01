@@ -1,10 +1,11 @@
 import os
 import time
-
+from game_won import you_win
 import pygame
 import sys
 from pausing import pause
-from Classes import Willy, Bullet, Boss, load_image, Cur
+from Classes import Willy, Bullet, Boss, load_image, Cur, Boss_bullet
+from Game_over import game_lose
 
 
 class SecondLevel:
@@ -70,14 +71,15 @@ class SecondLevel:
                     elif event.key == pygame.K_s:
                         self.willy.move_backwards = False
 
-                if event.type == pygame.MOUSEBUTTONUP:
+                if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                     # Выстрел игрока
                     self.willy_bullets.append(Bullet((self.willy.x, self.willy.y),
                                                      event.pos, self.willy_bullets, self.clock))
             # Автоматический выстрел босса
             if int(clock) + 1 == int(time.time()):
-                self.boss_bullets.append(Bullet((self.boss.x + 130, self.boss.y + 190),
-                                                (self.willy.x, self.willy.y), self.boss_bullets, self.clock))
+                self.boss_bullets.append(Boss_bullet((self.boss.x + 130, self.boss.y + 190),
+                                                (self.willy.x, self.willy.y), self.boss_bullets,
+                                                self.clock))
                 clock = time.time()
             # Проверка попадания в босса и в игрока
             for i in self.willy_bullets:
@@ -107,6 +109,8 @@ class SecondLevel:
             for bullet in self.willy_bullets:
                 self.screen.blit(bullet.image, bullet.rect)
             pygame.display.flip()
+        if self.boss.HP <= 0:
+            you_win("data/images/game_win.jpg")
         quit()
 
 

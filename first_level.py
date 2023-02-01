@@ -3,6 +3,9 @@ import random
 
 from Classes import Willy, Bullet, Ghost, load_image
 from pausing import pause
+from second_level import SecondLevel
+from game_won import you_win
+from Game_over import game_lose
 
 
 class FirstLevel:
@@ -48,7 +51,9 @@ class FirstLevel:
 
         running = True
         pausing = False
-        while running:
+        count = 1
+        n = 1
+        while count <= n and self.willy.HP > 0:
             if not pausing:
                 for event in pygame.event.get():
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
@@ -73,9 +78,9 @@ class FirstLevel:
                         elif event.key == pygame.K_w:
                             self.willy.move_forward = False
                         elif event.key == pygame.K_s:
-                            self.willy.move_backwards = False
+                            self.willy.move_backards = False
 
-                    if event.type == pygame.MOUSEBUTTONUP:
+                    if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                         self.bullets.append(Bullet((self.willy.x, self.willy.y), event.pos, self.bullets, self.clock))
 
                 self.willy.moving()
@@ -86,6 +91,7 @@ class FirstLevel:
                         i.hit(j)
                     is_living = j.update((self.willy.x, self.willy.y))
                     if not is_living:
+                        count += 1
                         self.ghosts.append(Ghost(*self.coords_for_ghosts[random.randint(0, 3)],
                                                  self.ghosts, self.willy, self.clock))
                 for i in self.bullets:
@@ -108,7 +114,12 @@ class FirstLevel:
                         pausing = False
 
             pygame.display.flip()
-        quit()
+        if self.willy.HP > 0:
+            you_win("data/images/game_win1.jpg")
+            sl = SecondLevel()
+            sl.play()
+        else:
+            game_lose()
 
 
 if __name__ == "__main__":
