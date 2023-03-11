@@ -2,7 +2,6 @@ import datetime
 import sqlite3
 import pygame
 import sys
-from Classes import Willy, Ghost
 
 pygame.init()
 screen = pygame.display.set_mode((1000, 800))
@@ -33,7 +32,8 @@ class Button:
                 running = False
             if number == 2:
                 willy = data[0]
-                ghosts = data[1:][0]
+                ghosts = data[1]
+                count = data[2]
                 date = datetime.datetime.now()
                 hp_willy = str(willy.HP)
                 hp_ghosts = " ".join([str(gh.HP) for gh in ghosts])
@@ -48,8 +48,8 @@ class Button:
                     willy_id += 1
                     l = cur.execute(f"""SELECT id from save WHERE id = {willy_id}""").fetchone()
                 cur.execute(f"""
-                INSERT INTO save(id, date, pos_willy, pos_ghosts, hp_willy, hp_ghosts) 
-                VALUES ({willy_id}, "{date}", "{pos_willy}", "{pos_ghosts}", "{hp_willy}", "{hp_ghosts}")
+                INSERT INTO save(id, date, pos_willy, pos_ghosts, hp_willy, hp_ghosts, count) 
+                VALUES ({willy_id}, "{date}", "{pos_willy}", "{pos_ghosts}", "{hp_willy}", "{hp_ghosts}", {count})
                 """)
                 con.commit()
                 print("Game saved")
@@ -78,7 +78,7 @@ button3 = Button(button_surface3, 500, 550, "В главное меню")
 running = True
 
 
-def pause(willy, ghosts):
+def pause(willy, ghosts, count):
     global running
     running = True
     while running:
@@ -92,7 +92,7 @@ def pause(willy, ghosts):
                 button1.checkForInput(pygame.mouse.get_pos(), 1)
                 # game = FirstLevel()
                 # game.play()
-                button2.checkForInput(pygame.mouse.get_pos(), 2, willy, ghosts)
+                button2.checkForInput(pygame.mouse.get_pos(), 2, willy, ghosts, count)
                 button3.checkForInput(pygame.mouse.get_pos(), 3)
         background_image = pygame.image.load('data/images/ScaledBG.png')
         screen.blit(background_image, [0, 0])
@@ -106,6 +106,7 @@ def pause(willy, ghosts):
 
 
 if __name__ == "__main__":
+    print("errror")
     willy = []
     ghosts = []
     W = Willy(1, 1, 1)

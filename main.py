@@ -2,6 +2,7 @@ import pygame
 import sys
 from first_level import FirstLevel
 from Classes import load_image
+from games import get_games
 
 pygame.init()
 screen = pygame.display.set_mode((1000, 800))
@@ -31,7 +32,8 @@ class Button:
                 game = FirstLevel()
                 game.play()
             if number == 2:
-                print("Get game!")
+                print("Get games!")
+                get_games()
             if number == 3:
                 print("About game!")
 
