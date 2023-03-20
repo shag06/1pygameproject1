@@ -343,6 +343,7 @@ class FirstLevel:
         const_gh = 2
         self.counter = const_gh
         self.count = count
+        self.size = width, height = 1000, 800
         size_of_hero = (82, 100)
         if pos_ghosts is None:
             pos_ghosts = [[0, 0], [0, self.size[1] - size_of_hero[1]], [self.size[0] - size_of_hero[0], 0],
@@ -405,11 +406,13 @@ class FirstLevel:
         running = True
         pausing = False
         count = 1
-        while count <= self.counter and self.willy.HP > 0:
+        while running and count <= self.counter and self.willy.HP > 0:
             if not pausing:
                 for event in pygame.event.get():
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                        pause(self.willy, self.ghosts, self.count)
+                        res = pause(self.willy, self.ghosts, self.count)
+                        if not res:
+                            running = False
                     if event.type == pygame.QUIT:
                         running = False
                     if event.type == pygame.KEYDOWN:
@@ -472,11 +475,11 @@ class FirstLevel:
                         pausing = False
 
             pygame.display.flip()
-        if self.willy.HP > 0:
+        if self.willy.HP > 0 and running == True:
             you_win("data/images/game_win1.jpg")
             sl = SecondLevel()
             sl.play()
-        else:
+        elif running == True:
             game_lose()
 
 
@@ -520,7 +523,11 @@ class SecondLevel:
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    pause(self.willy, [self.boss], 0)
+                    res = pause(self.willy, [self.boss], 0)
+                    print("pause =", res)
+                    if not res:
+                        print("STOP")
+                        running = False
                 if event.type == pygame.QUIT:
                     running = False
                 if event.type == pygame.KEYDOWN:
@@ -583,4 +590,3 @@ class SecondLevel:
             pygame.display.flip()
         if self.boss.HP <= 0:
             you_win("data/images/game_win.jpg")
-        quit()

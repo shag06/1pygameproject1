@@ -3,6 +3,7 @@ import sys
 from first_level import FirstLevel
 from Classes import load_image
 from games import get_games
+from about_game import about
 
 pygame.init()
 screen = pygame.display.set_mode((1000, 800))
@@ -33,9 +34,11 @@ class Button:
                 game.play()
             if number == 2:
                 print("Get games!")
+                print("WHAAAAAAAT")
                 get_games()
             if number == 3:
                 print("About game!")
+                about()
 
     def changeColor(self, position):
         if position[0] in range(self.rect.left, self.rect.right) and \

@@ -55,6 +55,8 @@ class Button:
                 print("Game saved")
             if number == 3:
                 print("Main menu!")
+                return False
+        return True
 
 
     def changeColor(self, position):
@@ -76,6 +78,7 @@ button1 = Button(button_surface1, 500, 175, "Возобновить игру")
 button2 = Button(button_surface2, 500, 370, "Сохранить игру")
 button3 = Button(button_surface3, 500, 550, "В главное меню")
 running = True
+buttons = [button1, button2, button3]
 
 
 def pause(willy, ghosts, count):
@@ -87,21 +90,22 @@ def pause(willy, ghosts, count):
                 running = False
                 break
             if event.type == pygame.QUIT:
+
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 button1.checkForInput(pygame.mouse.get_pos(), 1)
                 # game = FirstLevel()
                 # game.play()
                 button2.checkForInput(pygame.mouse.get_pos(), 2, willy, ghosts, count)
-                button3.checkForInput(pygame.mouse.get_pos(), 3)
+                res = button3.checkForInput(pygame.mouse.get_pos(), 3)
+                if not res:
+                    print("return False")
+                    return False
         background_image = pygame.image.load('data/images/ScaledBG.png')
         screen.blit(background_image, [0, 0])
-        button1.update()
-        button1.changeColor(pygame.mouse.get_pos())
-        button2.update()
-        button2.changeColor(pygame.mouse.get_pos())
-        button3.update()
-        button3.changeColor(pygame.mouse.get_pos())
+        for b in buttons:
+            b.update()
+            b.changeColor(pygame.mouse.get_pos())
         pygame.display.update()
 
 

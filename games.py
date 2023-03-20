@@ -92,4 +92,5 @@ def get_games():
     print(res)
 
 
-get_games()
+if __name__ == "__main__":
+    get_games()
