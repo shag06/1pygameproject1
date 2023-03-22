@@ -47,6 +47,7 @@ class Willy(pygame.sprite.Sprite):
 
         self.move_backwards = False
         self.counter_s = 0
+
         self.move_left = False
         self.counter_a = 0
 
@@ -433,7 +434,7 @@ class FirstLevel:
                         elif event.key == pygame.K_w:
                             self.willy.move_forward = False
                         elif event.key == pygame.K_s:
-                            self.willy.move_backards = False
+                            self.willy.move_backwards = False
 
                     if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                         self.bullets.append(Bullet((self.willy.x, self.willy.y), event.pos, self.bullets, self.clock))
@@ -454,17 +455,20 @@ class FirstLevel:
 
                 self.screen.blit(self.bg, (0, 0))
                 self.screen.blit(self.willy.image, self.willy.rect)
+
+                # ---------------------------------------
+                for wall in self.wall:
+                    for i in self.bullets:
+                        i.hit(wall)
+                for i in range(7):
+                    self.screen.blit(self.wall[i].image, self.wall[i].rect)
+                # ----------------
+
                 for ghost in self.ghosts:
                     self.screen.blit(ghost.image, ghost.rect)
                 for bullet in self.bullets:
                     self.screen.blit(bullet.image, bullet.rect)
-                    # ---------------------------------------
-                    for j in self.wall:
-                        for i in self.bullets:
-                            i.hit(j)
-                    for i in range(7):
-                        self.screen.blit(self.wall[i].image, self.wall[i].rect)
-                    # ----------------
+
                 # количество жизней у willy
                 self.progressbar_willy()
                 # количество жизней у ghost

@@ -3,7 +3,7 @@ import sys
 from first_level import FirstLevel
 from Classes import load_image
 from games import get_games
-from about_game import about
+from about_game2 import about_games
 
 pygame.init()
 screen = pygame.display.set_mode((1000, 800))
@@ -38,7 +38,7 @@ class Button:
                 get_games()
             if number == 3:
                 print("About game!")
-                about()
+                about_games()
 
     def changeColor(self, position):
         if position[0] in range(self.rect.left, self.rect.right) and \
@@ -79,7 +79,6 @@ def play():
         button3.update()
         button3.changeColor(pygame.mouse.get_pos())
         pygame.display.update()
-
 
 
 if __name__ == "__main__":
