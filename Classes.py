@@ -341,7 +341,7 @@ def start_level_from_data(data):
 
 class FirstLevel:
     def __init__(self, pos_willy=(400, 400), pos_ghosts=None, hp_willy=1400, hp_ghosts=(350, 350, 350, 350), count=0):
-        const_gh = 2
+        const_gh = 10
         self.counter = const_gh
         self.count = count
         self.size = width, height = 1000, 800
