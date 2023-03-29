@@ -24,7 +24,7 @@ class Willy(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         # Скорость движения
-        self.speed = 0.5
+        self.speed = 1
         # Параметр для анимации движения
         self.LENGTH = 4
         self.HP = hp
@@ -119,7 +119,7 @@ class Bullet(pygame.sprite.Sprite):
         self.y = pos[1]
         # Точка нажатия при выстреле, по ней формируется направление полёта пули
         self.target = target
-        self.SPEED = 1
+        self.SPEED = 2
         self.DAMAGE = 25
 
         self.rect = self.image.get_rect(topleft=pos)
@@ -170,7 +170,7 @@ class Ghost(pygame.sprite.Sprite):
     def __init__(self, x, y, group, willy, clock, hp):
         pygame.sprite.Sprite.__init__(self)
         self.pos = (x, y)
-        self.speed = 0.02
+        self.speed = 0.08
         self.HP = hp
         self.group = group
         self.LENGTH = 3
